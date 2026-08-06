@@ -1,6 +1,12 @@
 # Age Calculator UI
 
-The app uses a single responsive screen implemented in `App.tsx` with no additional runtime dependencies.
+The app uses a responsive screen with no additional runtime dependencies. The implementation is separated into focused modules:
+
+- `App.tsx` manages screen state, validation, and the main layout.
+- `src/components/DatePickerModal.tsx` contains the reusable calendar picker.
+- `src/components/AgeResult.tsx` renders the calculated result.
+- `src/utils/date.ts` contains date formatting, calendar generation, and age calculation logic.
+- `src/theme.ts` stores shared color tokens.
 
 ## User flow
 
