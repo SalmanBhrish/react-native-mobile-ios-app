@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { AgeResult } from './src/components/AgeResult';
-import { DatePickerModal } from './src/components/DatePickerModal';
+import { ScrollDatePickerModal } from './src/components/ScrollDatePickerModal';
 import { COLORS } from './src/theme';
 import { calculateAge, formatDate, startOfDay } from './src/utils/date';
 import type { Age } from './src/utils/date';
@@ -96,7 +96,7 @@ export default function App() {
         </View>
       </ScrollView>
 
-      <DatePickerModal
+      <ScrollDatePickerModal
         maximumDate={today}
         onClose={() => setPickerVisible(false)}
         onSelect={handleDateSelect}

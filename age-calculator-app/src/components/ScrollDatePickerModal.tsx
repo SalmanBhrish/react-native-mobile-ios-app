@@ -11,7 +11,7 @@ type DatePickerModalProps = {
   onSelect: (date: Date) => void;
 };
 
-export function DatePickerModal({
+export function ScrollDatePickerModal({
   selectedDate,
   maximumDate,
   visible,
