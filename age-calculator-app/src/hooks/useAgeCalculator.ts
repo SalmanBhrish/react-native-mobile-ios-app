@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { calculateAge, startOfDay } from '../utils/date';
+import { calculateAgeFromApi } from '../services/ageApi';
+import { startOfDay } from '../utils/date';
 import type { Age } from '../utils/date';
 
 export function useAgeCalculator() {
@@ -7,6 +8,7 @@ export function useAgeCalculator() {
   const [birthDate, setBirthDate] = useState<Date | null>(null);
   const [age, setAge] = useState<Age | null>(null);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
 
   const openPicker = () => setPickerVisible(true);
@@ -19,21 +21,28 @@ export function useAgeCalculator() {
     closePicker();
   };
 
-  const calculate = () => {
+  const calculate = async () => {
     if (!birthDate) {
       setAge(null);
       setError('Please select your date of birth.');
       return;
     }
 
-    if (birthDate > today) {
-      setAge(null);
-      setError('Date of birth cannot be in the future.');
-      return;
-    }
-
     setError('');
-    setAge(calculateAge(birthDate, today));
+    setAge(null);
+    setIsLoading(true);
+
+    try {
+      setAge(await calculateAgeFromApi(birthDate));
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Unable to calculate age.',
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return {
@@ -42,6 +51,7 @@ export function useAgeCalculator() {
     calculate,
     closePicker,
     error,
+    isLoading,
     openPicker,
     pickerVisible,
     selectBirthDate,

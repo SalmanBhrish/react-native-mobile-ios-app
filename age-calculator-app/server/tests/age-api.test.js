@@ -80,3 +80,10 @@ test('returns 404 for unknown routes', async () => {
   const response = await fetch(`${baseUrl}/unknown`);
   assert.equal(response.status, 404);
 });
+
+test('allows the Expo web UI to call the API', async () => {
+  const response = await fetch(`${baseUrl}/api/age`, { method: 'OPTIONS' });
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  assert.match(response.headers.get('access-control-allow-methods'), /POST/);
+});

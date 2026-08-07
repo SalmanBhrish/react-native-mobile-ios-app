@@ -3,6 +3,7 @@ import { calculateAge, parseDateOfBirth, utcToday } from './age.js';
 const MAX_BODY_BYTES = 10_000;
 
 function sendJson(response, statusCode, body) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
   response.writeHead(statusCode, { 'Content-Type': 'application/json; charset=utf-8' });
   response.end(JSON.stringify(body));
 }
@@ -33,6 +34,16 @@ export function createApp({ now = () => new Date() } = {}) {
 
     if (url.pathname !== '/api/age') {
       sendJson(response, 404, { error: 'Not found.' });
+      return;
+    }
+
+    if (request.method === 'OPTIONS') {
+      response.writeHead(204, {
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Origin': '*',
+      });
+      response.end();
       return;
     }
 

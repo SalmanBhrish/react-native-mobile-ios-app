@@ -20,6 +20,7 @@ export function AgeCalculatorScreen() {
     calculate,
     closePicker,
     error,
+    isLoading,
     openPicker,
     pickerVisible,
     selectBirthDate,
@@ -54,10 +55,18 @@ export function AgeCalculatorScreen() {
 
             <Pressable
               accessibilityRole="button"
+              accessibilityState={{ busy: isLoading, disabled: isLoading }}
+              disabled={isLoading}
               onPress={calculate}
-              style={({ pressed }) => [styles.calculateButton, pressed && styles.buttonPressed]}
+              style={({ pressed }) => [
+                styles.calculateButton,
+                isLoading && styles.buttonDisabled,
+                pressed && styles.buttonPressed,
+              ]}
             >
-              <Text style={styles.calculateButtonText}>Calculate age</Text>
+              <Text style={styles.calculateButtonText}>
+                {isLoading ? 'Calculating…' : 'Calculate age'}
+              </Text>
             </Pressable>
           </View>
 
@@ -145,5 +154,6 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
   },
   buttonPressed: { opacity: 0.86, transform: [{ scale: 0.99 }] },
+  buttonDisabled: { opacity: 0.65 },
   calculateButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
 });
