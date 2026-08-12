@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "age-calculator-app",
+    "name": "Age Calculator",
     "slug": "age-calculator-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,9 +13,13 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.salmanbhrish.agecalculator",
+      "buildNumber": "1"
     },
     "android": {
+      "package": "com.salmanbhrish.agecalculator",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
