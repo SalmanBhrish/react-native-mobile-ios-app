@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "api": "node server/index.js",
     "dev": "node server/dev.js",
+    "dev:tunnel": "node server/dev-tunnel.js",
     "test": "node --test server/tests/*.test.js"
   },
   "dependencies": {
