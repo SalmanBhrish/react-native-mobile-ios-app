@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import type { Age } from '../utils/date';
 
 type AgeApiResponse = {
@@ -6,13 +5,28 @@ type AgeApiResponse = {
   age: Age;
 };
 
-const defaultApiUrl = Platform.OS === 'android'
-  ? 'http://10.0.2.2:3000'
-  : 'http://localhost:3000';
+const REQUEST_TIMEOUT_MS = 10_000;
 
-export const AGE_API_URL = (
-  process.env.EXPO_PUBLIC_AGE_API_URL ?? defaultApiUrl
-).replace(/\/$/, '');
+const configuredApiUrl = process.env.EXPO_PUBLIC_AGE_API_URL?.trim();
+
+function resolveApiUrl(value: string | undefined): string | null {
+  if (!value) return null;
+
+  const withoutTrailingSlashes = value.replace(/\/+$/, '');
+
+  try {
+    const url = new URL(withoutTrailingSlashes);
+    if (!['http:', 'https:'].includes(url.protocol)) return null;
+    // 10.0.2.2 only reaches the host from an Android emulator, never a phone.
+    if (url.hostname === '10.0.2.2') return null;
+    if (!__DEV__ && url.protocol !== 'https:') return null;
+    return withoutTrailingSlashes;
+  } catch {
+    return null;
+  }
+}
+
+export const AGE_API_URL = resolveApiUrl(configuredApiUrl);
 
 function formatDateForApi(date: Date) {
   const year = date.getFullYear();
@@ -30,16 +44,29 @@ function isAge(value: unknown): value is Age {
 }
 
 export async function calculateAgeFromApi(birthDate: Date): Promise<Age> {
+  if (!AGE_API_URL) {
+    throw new Error(
+      'The age service is not configured. Please install an updated build or try again later.',
+    );
+  }
+
   let response: Response;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
     response = await fetch(`${AGE_API_URL}/api/age`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dateOfBirth: formatDateForApi(birthDate) }),
+      signal: controller.signal,
     });
   } catch {
-    throw new Error('Cannot connect to the age API. Make sure npm run dev is running.');
+    throw new Error(
+      'The age service cannot be reached right now. Check your connection and try again.',
+    );
+  } finally {
+    clearTimeout(timeout);
   }
 
   let data: AgeApiResponse | { error?: string };

@@ -5,17 +5,21 @@
   },
   "build": {
     "preview": {
+      "environment": "preview",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
     "ios-simulator": {
+      "environment": "preview",
       "distribution": "internal",
       "ios": {
         "simulator": true
       }
     },
-    "production": {}
+    "production": {
+      "environment": "production"
+    }
   }
 }
