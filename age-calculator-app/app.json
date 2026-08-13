@@ -29,6 +29,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "20044d21-ebb9-44a4-ad1a-8eaed759c51f"
+      }
+    },
+    "owner": "salmanbhrish"
   }
 }
