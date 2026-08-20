@@ -46,3 +46,6 @@ yarn-error.*
 CLAUDE.md
 
 *.aab
+
+# Downloaded EAS iOS Simulator artifacts
+age-calculator-ios-simulator.tar.gz
