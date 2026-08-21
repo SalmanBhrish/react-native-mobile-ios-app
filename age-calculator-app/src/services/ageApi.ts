@@ -5,7 +5,7 @@ type AgeApiResponse = {
   age: Age;
 };
 
-const REQUEST_TIMEOUT_MS = 10_000;
+const REQUEST_TIMEOUT_MS = 60_000;
 
 const configuredApiUrl = process.env.EXPO_PUBLIC_AGE_API_URL?.trim();
 
